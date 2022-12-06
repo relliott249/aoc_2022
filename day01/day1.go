@@ -61,7 +61,7 @@ func main() {
 	}
 
 	r := bufio.NewReader(f)
-	s, e := Readln(r)
+	var s, e = Readln(r)
 	for e == nil {
 		// if the current line isn't empty
 		if 0 != len(s) {
