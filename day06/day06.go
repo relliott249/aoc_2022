@@ -30,8 +30,8 @@ func Readln(r *bufio.Reader) (string, error) {
 }
 
 func checkMarker(s string) bool {
-	for i:= 0; i < len(s); i++{
-		for j := i+1; j < len(s); j++{
+	for i := 0; i < len(s); i++ {
+		for j := i + 1; j < len(s); j++ {
 			if s[i] == s[j] {
 				return false
 			}
@@ -40,9 +40,9 @@ func checkMarker(s string) bool {
 	return true
 }
 
-func findKeyPos(s string)(numChars int){
-	for i:=0; i < (len(s)-14); i++ {
-		if checkMarker(s[i:i+14]) {
+func findKeyPos(s string, keyLen int) (numChars int) {
+	for i := 0; i < (len(s) - keyLen); i++ {
+		if checkMarker(s[i : i+keyLen]) {
 			numChars = i
 			break
 		}
@@ -56,9 +56,10 @@ func main() {
 	check(err)
 	r := bufio.NewReader(f)
 	var numChars int = 0
+	var keyLen = 14
 	var s, e = Readln(r)
 	for e == nil {
-		numChars = findKeyPos(s) + 14
+		numChars = findKeyPos(s, keyLen) + keyLen
 		s, e = Readln(r)
 	}
 	fmt.Println("First key appears after: ", numChars, " characters")
