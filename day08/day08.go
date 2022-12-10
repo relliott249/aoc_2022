@@ -29,6 +29,45 @@ func Readln(r *bufio.Reader) (string, error) {
 	}
 	return string(ln), err
 }
+func viewScore(col []int, row []int, colPos int, rowPos int) (score int) {
+
+	var (
+		lView int = 0
+		rView int = 0
+		uView int = 0
+		dView int = 0
+	)
+	if (colPos == 0) || (rowPos == 0) || (colPos == len(col) || (rowPos == len(row))) {
+		score = 0
+	} else {
+		for x := rowPos - 1; x >= 0; x-- {
+			lView++
+			if row[rowPos] <= row[x] {
+				break
+			}
+		}
+		for x := rowPos + 1; x < len(row); x++ {
+			rView++
+			if row[rowPos] <= row[x] {
+				break
+			}
+		}
+		for y := colPos - 1; y >= 0; y-- {
+			dView++
+			if col[colPos] <= col[y] {
+				break
+			}
+		}
+		for y := colPos + 1; y < len(col); y++ {
+			uView++
+			if col[colPos] <= col[y] {
+				break
+			}
+		}
+	}
+	score = uView * dView * lView * rView
+	return score
+}
 
 func isVisible(col []int, row []int, colPos int, rowPos int) (visible bool) {
 	visible = true
@@ -36,31 +75,31 @@ func isVisible(col []int, row []int, colPos int, rowPos int) (visible bool) {
 	rowDown := true
 	colUp := true
 	rowUp := true
-	curTree := col[colPos]
-	fmt.Println(curTree)
+	//curTree := col[colPos]
+	//fmt.Println(curTree)
 	if (colPos == 0) || (rowPos == 0) || (colPos == len(col) || (rowPos == len(row))) {
 		visible = true
 	} else {
 		for x := rowPos - 1; x >= 0; x-- {
-			if row[rowPos] < row[x] {
+			if row[rowPos] <= row[x] {
 				rowDown = false
 				break
 			}
 		}
 		for x := rowPos + 1; x < len(row); x++ {
-			if row[rowPos] < row[x] {
+			if row[rowPos] <= row[x] {
 				rowUp = false
 				break
 			}
 		}
 		for y := colPos - 1; y >= 0; y-- {
-			if col[colPos] < col[y] {
+			if col[colPos] <= col[y] {
 				colDown = false
 				break
 			}
 		}
 		for y := colPos + 1; y < len(col); y++ {
-			if col[colPos] < col[y] {
+			if col[colPos] <= col[y] {
 				colUp = false
 				break
 			}
@@ -84,9 +123,9 @@ func main() {
 	}
 	f.Close()
 
-	var treeRows [5][]int
-	var treeCols [5][]int
-
+	var treeRows [99][]int
+	var treeCols [99][]int
+	var topViewScore int = 0
 	for x := 0; x < len(aocInput); x++ {
 		for y := 0; y < len(aocInput[x]); y++ {
 			var tmp int
@@ -96,8 +135,8 @@ func main() {
 		}
 	}
 	var numVisible int = 0
-	for rowPos := 0; rowPos < 5; rowPos++ {
-		for colPos := 0; colPos < 5; colPos++ {
+	for rowPos := 0; rowPos < 99; rowPos++ {
+		for colPos := 0; colPos < 99; colPos++ {
 			treeCols[rowPos] = append(treeCols[rowPos], treeRows[colPos][rowPos])
 		}
 	}
@@ -106,12 +145,17 @@ func main() {
 	for row := 0; row < len(treeRows); row++ {
 		for col := 0; col < len(treeCols); col++ {
 			if isVisible(treeCols[row], treeRows[col], col, row) {
+				score := viewScore(treeCols[row], treeRows[col], col, row)
+				if topViewScore < score {
+					topViewScore = score
+				}
 				numVisible++
 			}
 		}
 	}
 
 	fmt.Println("Number visible: ", numVisible)
+	fmt.Println("Top view Score: ", topViewScore)
 	//	yRow := trees[3]
 	//	var xCol []int
 	//	for y := 0; y < len(trees); y++ {
