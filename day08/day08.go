@@ -36,11 +36,8 @@ func isVisible(col []int, row []int, colPos int, rowPos int) (visible bool) {
 	rowDown := true
 	colUp := true
 	rowUp := true
-
-	if col[colPos] != row[rowPos] {
-		fmt.Println("Not looking at same value")
-	}
-
+	curTree := col[colPos]
+	fmt.Println(curTree)
 	if (colPos == 0) || (rowPos == 0) || (colPos == len(col) || (rowPos == len(row))) {
 		visible = true
 	} else {
@@ -87,31 +84,33 @@ func main() {
 	}
 	f.Close()
 
-	var trees [5][]int
+	var treeRows [5][]int
+	var treeCols [5][]int
 
 	for x := 0; x < len(aocInput); x++ {
 		for y := 0; y < len(aocInput[x]); y++ {
 			var tmp int
 			tmp, e = strconv.Atoi(string(aocInput[x][y]))
 			check(e)
-			trees[x] = append(trees[x], tmp)
+			treeRows[x] = append(treeRows[x], tmp)
 		}
 	}
-	//fmt.Println(trees)
-	var row []int
-	var col []int
 	var numVisible int = 0
 	for rowPos := 0; rowPos < 5; rowPos++ {
-		col = nil
-		row = trees[rowPos]
 		for colPos := 0; colPos < 5; colPos++ {
-			col = append(col, trees[colPos][rowPos])
+			treeCols[rowPos] = append(treeCols[rowPos], treeRows[colPos][rowPos])
 		}
-		fmt.Println("col:", col)
-		fmt.Println("Row: ", row)
-
 	}
-	numVisible = numVisible
+	//fmt.Println(treeRows)
+	//fmt.Println(treeCols)
+	for row := 0; row < len(treeRows); row++ {
+		for col := 0; col < len(treeCols); col++ {
+			if isVisible(treeCols[row], treeRows[col], col, row) {
+				numVisible++
+			}
+		}
+	}
+
 	fmt.Println("Number visible: ", numVisible)
 	//	yRow := trees[3]
 	//	var xCol []int
