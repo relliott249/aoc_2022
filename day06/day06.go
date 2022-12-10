@@ -63,5 +63,5 @@ func main() {
 		s, e = Readln(r)
 	}
 	fmt.Println("First key appears after: ", numChars, " characters")
-
+	f.Close()
 }

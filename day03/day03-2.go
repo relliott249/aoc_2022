@@ -84,20 +84,21 @@ func main() {
 		os.Exit(1)
 	}
 
-	var s1 string
 	var s2 string
+	var s3 string
 	var charValue int
 	var totalValue int = 0
 	r := bufio.NewReader(f)
-	var s, e = Readln(r)
+	var s1, e = Readln(r)
 	for e == nil {
-		s1, s2 = splitString(s)
+		s2, e = Readln(r)
+		s3, e = Readln(r)
 		fmt.Println(s1)
 		fmt.Println(s2)
 		fmt.Println(s3)
 		for i := 0; i < len(s1); i++ {
-			if findMatch(s1[i], s2) {
-				fmt.Printf("Found priority package %c\n", s1[i])
+			if findMatches(s1[i], s2, s3) {
+				fmt.Printf("Found match package %c\n", s1[i])
 				charValue = calcPriority(int(s1[i]))
 				fmt.Println("With Value: ", charValue)
 				totalValue += charValue

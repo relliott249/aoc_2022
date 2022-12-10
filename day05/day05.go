@@ -127,5 +127,5 @@ func main() {
 	}
 
 	fmt.Println(cols)
-
+	f.Close()
 }
