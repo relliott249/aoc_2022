@@ -171,7 +171,6 @@ func main() {
 	f, err := os.Open("/home/relliott/aoc_2022/day07/input_day07.txt")
 	check(err)
 	r := bufio.NewReader(f)
-
 	//var dirList [10]Directory
 	var aocInput []string
 	var s, e = Readln(r)

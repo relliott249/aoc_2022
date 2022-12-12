@@ -29,6 +29,7 @@ func Readln(r *bufio.Reader) (string, error) {
 	}
 	return string(ln), err
 }
+
 func viewScore(col []int, row []int, colPos int, rowPos int) (score int) {
 
 	var (
@@ -140,8 +141,6 @@ func main() {
 			treeCols[rowPos] = append(treeCols[rowPos], treeRows[colPos][rowPos])
 		}
 	}
-	//fmt.Println(treeRows)
-	//fmt.Println(treeCols)
 	for row := 0; row < len(treeRows); row++ {
 		for col := 0; col < len(treeCols); col++ {
 			if isVisible(treeCols[row], treeRows[col], col, row) {
@@ -156,18 +155,4 @@ func main() {
 
 	fmt.Println("Number visible: ", numVisible)
 	fmt.Println("Top view Score: ", topViewScore)
-	//	yRow := trees[3]
-	//	var xCol []int
-	//	for y := 0; y < len(trees); y++ {
-	//		xCol = append(xCol, trees[y][3])
-	//	}
-	//	fmt.Println(yRow)
-	//	fmt.Println(xCol)
-
-	//	visible := isVisible(xCol, yRow, 3, 3)
-
-	//fmt.Println(visible)
-
 }
-
-// Guesses P1 4142 too high
