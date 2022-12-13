@@ -6,27 +6,26 @@ import (
 
 type Monkey struct {
 	Id             int
-	Items          []uint64
-	DivBy          uint64
+	Items          []int64
+	DivBy          int64
 	Children       []*Monkey
 	NumInspections int
 }
 
-func (monkey *Monkey) throwItem(worryValue uint64) {
+func (monkey *Monkey) throwItem(worryValue int64) {
 	child := 0
-	newVal := worryValue
-	if newVal%monkey.DivBy == 0 {
-		child = 0
-	} else {
+	//worryValue = worryValue % (2*monkey.DivBy)
+	if worryValue%monkey.DivBy != 0 {
 		child = 1
+		//fmt.Print("Worry level is not divisible by: ", monkey.DivBy, " so it throws it to ")
 	}
-	//fmt.Println("Item with worry value of: ", worryValue, " is divided by: ", monkey.DivBy, " to new worry level of: ", newVal, " is thrown to ", monkey.Children[child].Id)
-	monkey.Children[child].Items = append(monkey.Children[child].Items, newVal)
+	//fmt.Println(" monkey: ", monkey.Children[child].Id)
+	monkey.Children[child].Items = append(monkey.Children[child].Items, worryValue)
 	monkey.Items = monkey.Items[1:]
 	monkey.NumInspections++
 }
 
-func getOp(id int, curItem uint64) (worry uint64) {
+func getOp(id int, curItem int64) (worry int64) {
 	switch id {
 	case 0:
 		worry = curItem * 19
@@ -42,7 +41,7 @@ func getOp(id int, curItem uint64) (worry uint64) {
 	return worry
 }
 
-func newMonkey(id int, items []uint64, divBy uint64) *Monkey {
+func newMonkey(id int, items []int64, divBy int64) *Monkey {
 	return &Monkey{
 		Id:             id,
 		Items:          items,
@@ -58,10 +57,10 @@ func (monkey *Monkey) addChild(child *Monkey) {
 
 func main() {
 	// initialize the monkeys
-	items0 := []uint64{79, 98}
-	items1 := []uint64{54, 65, 75, 74}
-	items2 := []uint64{79, 60, 97}
-	items3 := []uint64{74}
+	items0 := []int64{79, 98}
+	items1 := []int64{54, 65, 75, 74}
+	items2 := []int64{79, 60, 97}
+	items3 := []int64{74}
 
 	monkey0 := newMonkey(0, items0, 23)
 	monkey1 := newMonkey(1, items1, 19)
@@ -82,12 +81,13 @@ func main() {
 
 	monkeys := []*Monkey{monkey0, monkey1, monkey2, monkey3}
 
-	var worryVal uint64
+	var worryVal int64
 	for round := 0; round < 10000; round++ {
 		for i := 0; i < len(monkeys); i++ {
 			for len(monkeys[i].Items) != 0 {
 				//fmt.Println("Monkey: ", i, " inspects an item with a worry level of: ", monkeys[i].Items[0])
 				worryVal = getOp(i, monkeys[i].Items[0])
+				worryVal = worryVal%(23*19*13*17)
 				//fmt.Println("Worry level is multiplied to be:", worryVal)
 				monkeys[i].throwItem(worryVal)
 			}

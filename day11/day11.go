@@ -12,13 +12,10 @@ type Monkey struct {
 
 func (monkey *Monkey) throwItem(worryValue int) {
 	child := 0
-	newValue := worryValue / 3
-	if newValue%monkey.DivBy == 0 {
-		child = 0
-	} else {
+	if worryValue%monkey.DivBy != 0 {
 		child = 1
 	}
-	monkey.Children[child].Items = append(monkey.Children[child].Items, newValue)
+	monkey.Children[child].Items = append(monkey.Children[child].Items, worryValue)
 	monkey.Items = monkey.Items[1:]
 	monkey.NumInspections++
 }
@@ -106,12 +103,16 @@ func main() {
 	monkey7.addChild(monkey6)
 
 	monkeys := []*Monkey{monkey0, monkey1, monkey2, monkey3, monkey4, monkey5, monkey6, monkey7}
+	totalFactor := 1
+	for i:= 0; i < len(monkeys); i++{
+		totalFactor *= monkeys[i].DivBy
+	}
 
 	var worryVal int
-	for round := 0; round < 20; round++ {
+	for round := 0; round < 10000; round++ {
 		for i := 0; i < len(monkeys); i++ {
 			for len(monkeys[i].Items) != 0 {
-				worryVal = getOp(i, monkeys[i].Items[0])
+				worryVal = getOp(i, monkeys[i].Items[0]) % totalFactor
 				monkeys[i].throwItem(worryVal)
 			}
 		}
